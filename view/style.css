@@ -1,0 +1,27 @@
+body {
+  background-color: rgb(89, 63, 112);
+  color: white;
+}
+
+#grid-board {
+  display: grid;
+  border-left: 1px dashed darkgray;
+  border-top: 1px dashed darkgray;
+  width: fit-content;
+}
+
+.cell {
+  width: 32px;
+  aspect-ratio: 1 / 1;
+  background-color: #5a5a80;
+  border-right: 1px dashed darkgray;
+  border-bottom: 1px dashed darkgray;
+}
+
+.player {
+  background-color: rgb(73, 136, 92);
+}
+
+.goal {
+  background-color: rgb(147, 147, 68);
+}
