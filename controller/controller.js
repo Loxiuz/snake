@@ -8,12 +8,13 @@ window.addEventListener("load", () => {
   controller.init();
 });
 
-const boardHeight = 15;
-const boardWidth = 15;
+const boardHeight = 30;
+const boardWidth = 30;
 const snakeStartSize = 3;
 
 class Controller {
   constructor() {
+    //The visual board works better if it's a square
     this.board = new Grid(boardHeight, boardWidth); //(Rows, colums)
     this.snake = new Queue();
     this.direction = "ArrowLeft";
@@ -25,6 +26,7 @@ class Controller {
     console.log("Controller script running...");
     document.addEventListener("keydown", this.keyDown);
     this.#initSnake();
+    this.#setRandomGoal();
     this.tick();
   }
 
@@ -41,7 +43,7 @@ class Controller {
   }
 
   tick() {
-    setTimeout(this.tick, 250);
+    let timeId = setTimeout(this.tick, 100);
 
     for (let i = 0; i < this.snake.size(); i++) {
       const s = this.snake.get(i).data;
@@ -81,7 +83,19 @@ class Controller {
     }
 
     this.snake.enqueue(head);
-    this.snake.dequeue();
+
+    if (this.#isGameOver(head)) {
+      clearTimeout(timeId);
+      return;
+    }
+
+    if (this.board.get(head) === 2) {
+      setTimeout(() => {
+        this.#setRandomGoal();
+      }, 1000);
+    } else {
+      this.snake.dequeue();
+    }
 
     for (let i = 0; i < this.snake.size(); i++) {
       const s = this.snake.get(i).data;
@@ -91,6 +105,32 @@ class Controller {
 
     this.#displayBoard();
     // this.board.dump();
+  }
+
+  #isGameOver(snakeHead) {
+    if (this.snake.size() > snakeStartSize + 1) {
+      for (let i = 0; i < this.snake.size() - 1; i++) {
+        const part = this.snake.get(i).data;
+        if (part.row === snakeHead.row && part.col === snakeHead.col) {
+          console.log("Game Over");
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  #setRandomGoal() {
+    while (true) {
+      const cell = {
+        row: Math.floor(Math.random() * this.board.getRows()),
+        col: Math.floor(Math.random() * this.board.getCols()),
+      };
+      if (this.board.get(cell) === 0) {
+        this.board.set(cell, 2);
+        return;
+      }
+    }
   }
 
   #displayBoard() {
@@ -114,7 +154,7 @@ class Controller {
         }
       }
     }
-    //This will only show probably if rows and columns are the same
+    //This will only show probably, if rows and columns are the same
     document.getElementById(
       "grid-board"
     ).style = `grid-template-columns: repeat(${this.board.getRows()}, max-content)`;

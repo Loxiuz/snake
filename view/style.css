@@ -11,7 +11,7 @@ body {
 }
 
 .cell {
-  width: 32px;
+  width: 15px;
   aspect-ratio: 1 / 1;
   background-color: #5a5a80;
   border-right: 1px dashed darkgray;
