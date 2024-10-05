@@ -10,7 +10,7 @@ window.addEventListener("load", () => {
 
 const boardHeight = 30;
 const boardWidth = 30;
-const snakeStartSize = 3;
+const snakeStartSize = 8;
 
 class Controller {
   constructor() {
